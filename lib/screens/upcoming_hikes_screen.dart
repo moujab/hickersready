@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_data.dart';
+import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/detail_page.dart';
 
@@ -13,7 +13,7 @@ class UpcomingHikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final hikes = [...MockData.upcomingHikes]..sort((a, b) => a.date.compareTo(b.date));
+    final hikes = [...LocalStore.upcomingHikes]..sort((a, b) => a.date.compareTo(b.date));
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuUpcomingHikes)),
       body: ListView.builder(

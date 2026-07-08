@@ -19,4 +19,22 @@ class Contributor {
   final String description;
   final String contactPhone;
   final List<String> productImageUrls;
+
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'businessName': businessName,
+    'category': category,
+    'description': description,
+    'contactPhone': contactPhone,
+    'productImageUrls': productImageUrls,
+  };
+
+  factory Contributor.fromMap(Map<String, dynamic> map) => Contributor(
+    id: map['id'] as String,
+    businessName: map['businessName'] as String,
+    category: map['category'] as String,
+    description: map['description'] as String,
+    contactPhone: map['contactPhone'] as String,
+    productImageUrls: List<String>.from(map['productImageUrls'] as List? ?? const []),
+  );
 }

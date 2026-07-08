@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_data.dart';
+import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/invitation.dart';
 
@@ -15,9 +15,9 @@ class InvitationsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuTrailsDone)),
       body: ListView.builder(
-        itemCount: MockData.invitations.length,
+        itemCount: LocalStore.invitations.length,
         itemBuilder: (context, index) {
-          final invitation = MockData.invitations[index];
+          final invitation = LocalStore.invitations[index];
           return ListTile(
             title: Text(invitation.trailName),
             subtitle: Text('${invitation.date.year}/${invitation.date.month}/${invitation.date.day}'),

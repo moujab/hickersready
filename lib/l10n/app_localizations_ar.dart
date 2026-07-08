@@ -31,4 +31,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noItems => 'لا توجد عناصر لعرضها بعد';
+
+  @override
+  String get groupName => 'Walk and Discover Group';
 }

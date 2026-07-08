@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_data.dart';
+import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import 'contributor_detail_screen.dart';
 
@@ -16,9 +16,9 @@ class ContributorsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuContributors)),
       body: ListView.builder(
-        itemCount: MockData.contributors.length,
+        itemCount: LocalStore.contributors.length,
         itemBuilder: (context, index) {
-          final contributor = MockData.contributors[index];
+          final contributor = LocalStore.contributors[index];
           return ListTile(
             title: Text(contributor.businessName),
             subtitle: Text(contributor.category),

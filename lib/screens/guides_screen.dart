@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_data.dart';
+import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/detail_page.dart';
 
@@ -14,9 +14,9 @@ class GuidesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuGuides)),
       body: ListView.builder(
-        itemCount: MockData.guides.length,
+        itemCount: LocalStore.guides.length,
         itemBuilder: (context, index) {
-          final guide = MockData.guides[index];
+          final guide = LocalStore.guides[index];
           return ListTile(
             title: Text(guide.name),
             onTap: () => Navigator.of(context).push(

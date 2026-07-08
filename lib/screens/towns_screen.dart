@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_data.dart';
+import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/detail_page.dart';
 
@@ -15,9 +15,9 @@ class TownsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuTownsVisited)),
       body: ListView.builder(
-        itemCount: MockData.towns.length,
+        itemCount: LocalStore.towns.length,
         itemBuilder: (context, index) {
-          final town = MockData.towns[index];
+          final town = LocalStore.towns[index];
           return ListTile(
             title: Text(town.name),
             onTap: () => Navigator.of(context).push(

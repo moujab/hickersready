@@ -10,5 +10,9 @@
   "menuContributors": "المساهمون",
   "menuUpcomingHikes": "الرحلات القادمة",
   "close": "إغلاق",
-  "noItems": "لا توجد عناصر لعرضها بعد"
+  "noItems": "لا توجد عناصر لعرضها بعد",
+  "groupName": "Walk and Discover Group",
+  "@groupName": {
+    "description": "Name of the group behind the app, shown as a credit line"
+  }
 }

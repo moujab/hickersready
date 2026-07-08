@@ -141,6 +141,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد عناصر لعرضها بعد'**
   String get noItems;
+
+  /// Name of the group behind the app, shown as a credit line
+  ///
+  /// In ar, this message translates to:
+  /// **'Walk and Discover Group'**
+  String get groupName;
 }
 
 class _AppLocalizationsDelegate

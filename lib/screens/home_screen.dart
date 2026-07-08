@@ -14,45 +14,100 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.appTitle)),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.hiking),
-            title: Text(l10n.menuTrailsDone),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (context) => const InvitationsScreen()),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(l10n.appTitle),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/home_background.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: DecoratedBox(
+          // Scrim over the photo keeps the app bar title and cards readable
+          // regardless of how bright the underlying image is.
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black.withValues(alpha: 0.45), Colors.black.withValues(alpha: 0.15)],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.location_city),
-            title: Text(l10n.menuTownsVisited),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (context) => const TownsScreen()),
+          child: ListView(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + kToolbarHeight + 16),
+          children: [
+            _MenuCard(
+              icon: Icons.hiking,
+              label: l10n.menuTrailsDone,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const InvitationsScreen()),
+              ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_pin),
-            title: Text(l10n.menuGuides),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (context) => const GuidesScreen()),
+            _MenuCard(
+              icon: Icons.location_city,
+              label: l10n.menuTownsVisited,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const TownsScreen()),
+              ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.storefront),
-            title: Text(l10n.menuContributors),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (context) => const ContributorsScreen()),
+            _MenuCard(
+              icon: Icons.person_pin,
+              label: l10n.menuGuides,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const GuidesScreen()),
+              ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.event),
-            title: Text(l10n.menuUpcomingHikes),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (context) => const UpcomingHikesScreen()),
+            _MenuCard(
+              icon: Icons.storefront,
+              label: l10n.menuContributors,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const ContributorsScreen()),
+              ),
             ),
+            _MenuCard(
+              icon: Icons.event,
+              label: l10n.menuUpcomingHikes,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const UpcomingHikesScreen()),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: Text(
+                  l10n.groupName,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuCard extends StatelessWidget {
+  const _MenuCard({required this.icon, required this.label, required this.onTap});
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      color: Colors.white.withValues(alpha: 0.92),
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(label),
+        onTap: onTap,
       ),
     );
   }

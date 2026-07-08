@@ -1,0 +1,14 @@
+{
+  "@@locale": "ar",
+  "appTitle": "طريق المتنزهين",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "menuTrailsDone": "المسارات التي قمنا بها",
+  "menuTownsVisited": "البلدات والقرى التي زرناها",
+  "menuGuides": "مرشدونا",
+  "menuContributors": "المساهمون",
+  "menuUpcomingHikes": "الرحلات القادمة",
+  "close": "إغلاق",
+  "noItems": "لا توجد عناصر لعرضها بعد"
+}

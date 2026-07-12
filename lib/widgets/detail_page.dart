@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'options_background.dart';
+
 /// Generic detail page: an app bar with [title] and a scrollable body
 /// showing [description].
 class DetailPage extends StatelessWidget {
@@ -12,10 +14,12 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Text(description, style: Theme.of(context).textTheme.bodyLarge),
+      body: OptionsBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Text(description, style: Theme.of(context).textTheme.bodyLarge),
+          ),
         ),
       ),
     );

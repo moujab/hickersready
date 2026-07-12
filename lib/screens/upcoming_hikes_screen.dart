@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/detail_page.dart';
+import '../widgets/options_background.dart';
 
 /// Menu item 5: "Upcoming hikes" — future hikes in chronological order;
 /// tapping one shows a description of the activity. A separate entity from
@@ -16,20 +17,22 @@ class UpcomingHikesScreen extends StatelessWidget {
     final hikes = [...LocalStore.upcomingHikes]..sort((a, b) => a.date.compareTo(b.date));
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuUpcomingHikes)),
-      body: ListView.builder(
-        itemCount: hikes.length,
-        itemBuilder: (context, index) {
-          final hike = hikes[index];
-          return ListTile(
-            title: Text(hike.trailName),
-            subtitle: Text('${hike.date.year}/${hike.date.month}/${hike.date.day}'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (context) => DetailPage(title: hike.trailName, description: hike.description),
+      body: OptionsBackground(
+        child: ListView.builder(
+          itemCount: hikes.length,
+          itemBuilder: (context, index) {
+            final hike = hikes[index];
+            return ListTile(
+              title: Text(hike.trailName),
+              subtitle: Text('${hike.date.year}/${hike.date.month}/${hike.date.day}'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => DetailPage(title: hike.trailName, description: hike.description),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

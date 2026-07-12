@@ -1,14 +1,76 @@
 import 'package:flutter/material.dart';
 
+import '../data/admin_session.dart';
+import '../data/background_audio.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/detail_page.dart';
 import 'contributors_screen.dart';
 import 'guides_screen.dart';
 import 'invitations_screen.dart';
+import 'settings_screen.dart';
 import 'towns_screen.dart';
 import 'upcoming_hikes_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<void> _handleAdminTap(BuildContext context, bool isAdmin) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (isAdmin) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.adminModeOn),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancel)),
+            TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(l10n.logout)),
+          ],
+        ),
+      );
+      if (confirmed == true) AdminSession.instance.logout();
+      return;
+    }
+
+    final pinController = TextEditingController();
+    var showError = false;
+    await showDialog<void>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(l10n.adminLogin),
+          content: TextField(
+            controller: pinController,
+            obscureText: true,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: l10n.pin,
+              errorText: showError ? l10n.incorrectPin : null,
+            ),
+            onSubmitted: (_) {
+              if (AdminSession.instance.tryLogin(pinController.text)) {
+                Navigator.of(context).pop();
+              } else {
+                setState(() => showError = true);
+              }
+            },
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.cancel)),
+            TextButton(
+              onPressed: () {
+                if (AdminSession.instance.tryLogin(pinController.text)) {
+                  Navigator.of(context).pop();
+                } else {
+                  setState(() => showError = true);
+                }
+              },
+              child: Text(l10n.adminLogin),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +80,24 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.appTitle),
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          ValueListenableBuilder<bool>(
+            valueListenable: AdminSession.instance.isAdmin,
+            builder: (context, isAdmin, _) => IconButton(
+              icon: Icon(isAdmin ? Icons.admin_panel_settings : Icons.admin_panel_settings_outlined),
+              onPressed: () => _handleAdminTap(context, isAdmin),
+            ),
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: BackgroundAudio.instance.playing,
+            builder: (context, playing, _) => IconButton(
+              icon: Icon(playing ? Icons.volume_up : Icons.volume_off),
+              onPressed: BackgroundAudio.instance.toggle,
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -73,6 +152,25 @@ class HomeScreen extends StatelessWidget {
               label: l10n.menuUpcomingHikes,
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (context) => const UpcomingHikesScreen()),
+              ),
+            ),
+            _MenuCard(
+              icon: Icons.groups,
+              label: l10n.menuWhoAreWe,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => DetailPage(
+                    title: l10n.menuWhoAreWe,
+                    description: l10n.whoAreWeDescription,
+                  ),
+                ),
+              ),
+            ),
+            _MenuCard(
+              icon: Icons.settings,
+              label: l10n.menuSettings,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const SettingsScreen()),
               ),
             ),
             Padding(

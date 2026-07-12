@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'data/auth_session.dart';
 import 'data/local_store.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,10 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)),
-      home: const HomeScreen(),
+      home: ValueListenableBuilder<bool>(
+        valueListenable: AuthSession.instance.isLoggedIn,
+        builder: (context, isLoggedIn, _) => isLoggedIn ? const HomeScreen() : const LoginScreen(),
+      ),
     );
   }
 }

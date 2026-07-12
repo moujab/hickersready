@@ -1,10 +1,12 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../models/account.dart';
 import '../models/contributor.dart';
 import '../models/guide.dart';
 import '../models/invitation.dart';
 import '../models/town.dart';
 import '../models/upcoming_hike.dart';
+import '../models/user_profile.dart';
 import 'mock_data.dart';
 
 /// On-device persistence backed by Hive. Boxes are seeded once from
@@ -16,6 +18,9 @@ class LocalStore {
   static const _guidesBox = 'guides';
   static const _contributorsBox = 'contributors';
   static const _upcomingHikesBox = 'upcomingHikes';
+  static const _userProfileBox = 'userProfile';
+  static const _userProfileKey = 'profile';
+  static const _accountsBox = 'accounts';
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -25,6 +30,8 @@ class LocalStore {
       Hive.openBox<Map>(_guidesBox),
       Hive.openBox<Map>(_contributorsBox),
       Hive.openBox<Map>(_upcomingHikesBox),
+      Hive.openBox<Map>(_userProfileBox),
+      Hive.openBox<Map>(_accountsBox),
     ]);
     await _seedIfEmpty();
   }
@@ -95,4 +102,38 @@ class LocalStore {
       .values
       .map((map) => UpcomingHike.fromMap(Map<String, dynamic>.from(map)))
       .toList();
+
+  static Future<void> putInvitation(Invitation invitation) =>
+      Hive.box<Map>(_invitationsBox).put(invitation.id, invitation.toMap());
+
+  static Future<void> deleteInvitation(String id) => Hive.box<Map>(_invitationsBox).delete(id);
+
+  static Future<void> putTown(Town town) => Hive.box<Map>(_townsBox).put(town.id, town.toMap());
+
+  static Future<void> deleteTown(String id) => Hive.box<Map>(_townsBox).delete(id);
+
+  static Future<void> putGuide(Guide guide) => Hive.box<Map>(_guidesBox).put(guide.id, guide.toMap());
+
+  static Future<void> deleteGuide(String id) => Hive.box<Map>(_guidesBox).delete(id);
+
+  static Future<void> putContributor(Contributor contributor) =>
+      Hive.box<Map>(_contributorsBox).put(contributor.id, contributor.toMap());
+
+  static Future<void> deleteContributor(String id) => Hive.box<Map>(_contributorsBox).delete(id);
+
+  static UserProfile get userProfile {
+    final map = Hive.box<Map>(_userProfileBox).get(_userProfileKey);
+    return map == null ? UserProfile.empty : UserProfile.fromMap(Map<String, dynamic>.from(map));
+  }
+
+  static Future<void> putUserProfile(UserProfile profile) =>
+      Hive.box<Map>(_userProfileBox).put(_userProfileKey, profile.toMap());
+
+  static Account? getAccount(String email) {
+    final map = Hive.box<Map>(_accountsBox).get(email);
+    return map == null ? null : Account.fromMap(Map<String, dynamic>.from(map));
+  }
+
+  static Future<void> putAccount(Account account) =>
+      Hive.box<Map>(_accountsBox).put(account.email, account.toMap());
 }

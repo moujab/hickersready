@@ -17,11 +17,21 @@ class InvitationsScreen extends StatefulWidget {
 }
 
 class _InvitationsScreenState extends State<InvitationsScreen> {
+  late Future<List<Invitation>> _invitations;
+
+  @override
+  void initState() {
+    super.initState();
+    _invitations = LocalStore.invitations;
+  }
+
+  void _reload() => setState(() => _invitations = LocalStore.invitations);
+
   Future<void> _openForm({Invitation? invitation}) async {
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute<bool>(builder: (context) => InvitationFormScreen(invitation: invitation)),
     );
-    if (saved == true) setState(() {});
+    if (saved == true) _reload();
   }
 
   Future<void> _delete(Invitation invitation) async {
@@ -39,7 +49,7 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
     );
     if (confirmed == true) {
       await LocalStore.deleteInvitation(invitation.id);
-      setState(() {});
+      _reload();
     }
   }
 
@@ -66,34 +76,41 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuTrailsDone)),
       body: OptionsBackground(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: AdminSession.instance.isAdmin,
-          builder: (context, isAdmin, _) => ListView.builder(
-            itemCount: LocalStore.invitations.length,
-            itemBuilder: (context, index) {
-              final invitation = LocalStore.invitations[index];
-              return ListTile(
-                title: Text(invitation.trailName),
-                subtitle: Text('${invitation.date.year}/${invitation.date.month}/${invitation.date.day}'),
-                onTap: () => _showInvitation(context, invitation),
-                trailing: isAdmin
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _openForm(invitation: invitation),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _delete(invitation),
-                          ),
-                        ],
-                      )
-                    : null,
-              );
-            },
-          ),
+        child: FutureBuilder<List<Invitation>>(
+          future: _invitations,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final invitations = snapshot.data!;
+            return ValueListenableBuilder<bool>(
+              valueListenable: AdminSession.instance.isAdmin,
+              builder: (context, isAdmin, _) => ListView.builder(
+                itemCount: invitations.length,
+                itemBuilder: (context, index) {
+                  final invitation = invitations[index];
+                  return ListTile(
+                    title: Text(invitation.trailName),
+                    subtitle: Text('${invitation.date.year}/${invitation.date.month}/${invitation.date.day}'),
+                    onTap: () => _showInvitation(context, invitation),
+                    trailing: isAdmin
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _openForm(invitation: invitation),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _delete(invitation),
+                              ),
+                            ],
+                          )
+                        : null,
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: ValueListenableBuilder<bool>(

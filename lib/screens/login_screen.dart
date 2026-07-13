@@ -27,20 +27,20 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final l10n = AppLocalizations.of(context)!;
     final email = _emailController.text;
     final password = _passwordController.text;
 
     if (_isRegisterMode) {
-      final result = AuthSession.instance.register(email, password);
-      if (result == RegisterResult.emailTaken) {
+      final result = await AuthSession.instance.register(email, password);
+      if (result == RegisterResult.emailTaken && mounted) {
         setState(() => _errorText = l10n.emailTaken);
       }
     } else {
-      final result = AuthSession.instance.login(email, password);
-      if (result == LoginResult.invalidCredentials) {
+      final result = await AuthSession.instance.login(email, password);
+      if (result == LoginResult.invalidCredentials && mounted) {
         setState(() => _errorText = l10n.invalidCredentials);
       }
     }

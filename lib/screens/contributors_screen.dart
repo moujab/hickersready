@@ -20,11 +20,21 @@ class ContributorsScreen extends StatefulWidget {
 }
 
 class _ContributorsScreenState extends State<ContributorsScreen> {
+  late Future<List<Contributor>> _contributors;
+
+  @override
+  void initState() {
+    super.initState();
+    _contributors = LocalStore.contributors;
+  }
+
+  void _reload() => setState(() => _contributors = LocalStore.contributors);
+
   Future<void> _openForm({Contributor? contributor}) async {
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute<bool>(builder: (context) => ContributorFormScreen(contributor: contributor)),
     );
-    if (saved == true) setState(() {});
+    if (saved == true) _reload();
   }
 
   Future<void> _delete(Contributor contributor) async {
@@ -42,7 +52,7 @@ class _ContributorsScreenState extends State<ContributorsScreen> {
     );
     if (confirmed == true) {
       await LocalStore.deleteContributor(contributor.id);
-      setState(() {});
+      _reload();
     }
   }
 
@@ -52,35 +62,42 @@ class _ContributorsScreenState extends State<ContributorsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuContributors)),
       body: OptionsBackground(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: AdminSession.instance.isAdmin,
-          builder: (context, isAdmin, _) => ListView.builder(
-            itemCount: LocalStore.contributors.length,
-            itemBuilder: (context, index) {
-              final contributor = LocalStore.contributors[index];
-              return ListTile(
-                title: Text(contributor.businessName),
-                subtitle: Text(contributor.category),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => ContributorDetailScreen(contributor: contributor),
-                  ),
-                ),
-                trailing: isAdmin
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _openForm(contributor: contributor),
-                          ),
-                          IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(contributor)),
-                        ],
-                      )
-                    : null,
-              );
-            },
-          ),
+        child: FutureBuilder<List<Contributor>>(
+          future: _contributors,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final contributors = snapshot.data!;
+            return ValueListenableBuilder<bool>(
+              valueListenable: AdminSession.instance.isAdmin,
+              builder: (context, isAdmin, _) => ListView.builder(
+                itemCount: contributors.length,
+                itemBuilder: (context, index) {
+                  final contributor = contributors[index];
+                  return ListTile(
+                    title: Text(contributor.businessName),
+                    subtitle: Text(contributor.category),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => ContributorDetailScreen(contributor: contributor),
+                      ),
+                    ),
+                    trailing: isAdmin
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _openForm(contributor: contributor),
+                              ),
+                              IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(contributor)),
+                            ],
+                          )
+                        : null,
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: ValueListenableBuilder<bool>(

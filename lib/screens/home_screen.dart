@@ -46,9 +46,10 @@ class HomeScreen extends StatelessWidget {
               labelText: l10n.pin,
               errorText: showError ? l10n.incorrectPin : null,
             ),
-            onSubmitted: (_) {
-              if (AdminSession.instance.tryLogin(pinController.text)) {
-                Navigator.of(context).pop();
+            onSubmitted: (_) async {
+              final dialogContext = context;
+              if (await AdminSession.instance.tryLogin(pinController.text)) {
+                if (dialogContext.mounted) Navigator.of(dialogContext).pop();
               } else {
                 setState(() => showError = true);
               }
@@ -57,9 +58,10 @@ class HomeScreen extends StatelessWidget {
           actions: [
             TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.cancel)),
             TextButton(
-              onPressed: () {
-                if (AdminSession.instance.tryLogin(pinController.text)) {
-                  Navigator.of(context).pop();
+              onPressed: () async {
+                final dialogContext = context;
+                if (await AdminSession.instance.tryLogin(pinController.text)) {
+                  if (dialogContext.mounted) Navigator.of(dialogContext).pop();
                 } else {
                   setState(() => showError = true);
                 }

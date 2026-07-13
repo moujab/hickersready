@@ -1,19 +1,20 @@
 import 'package:flutter/foundation.dart';
 
-/// App-wide admin gate. There is no backend auth yet (see [LocalStore]), so
-/// this checks a hardcoded PIN and flips a session-only flag — a placeholder
-/// until real Spring Boot-backed admin auth exists.
+import 'api_client.dart';
+
+/// App-wide admin gate, checked against the Spring Boot backend's
+/// configured PIN (see `hikersway.admin-pin` in the backend's
+/// application.properties).
 class AdminSession {
   AdminSession._();
 
   static final AdminSession instance = AdminSession._();
 
-  static const String _pin = '1234';
-
   final ValueNotifier<bool> isAdmin = ValueNotifier<bool>(false);
 
-  bool tryLogin(String pin) {
-    if (pin == _pin) {
+  Future<bool> tryLogin(String pin) async {
+    final response = await ApiClient.post('/admin/login', {'pin': pin});
+    if (response.statusCode == 200) {
       isAdmin.value = true;
       return true;
     }

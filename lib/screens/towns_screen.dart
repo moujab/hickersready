@@ -18,11 +18,21 @@ class TownsScreen extends StatefulWidget {
 }
 
 class _TownsScreenState extends State<TownsScreen> {
+  late Future<List<Town>> _towns;
+
+  @override
+  void initState() {
+    super.initState();
+    _towns = LocalStore.towns;
+  }
+
+  void _reload() => setState(() => _towns = LocalStore.towns);
+
   Future<void> _openForm({Town? town}) async {
     final saved = await Navigator.of(
       context,
     ).push<bool>(MaterialPageRoute<bool>(builder: (context) => TownFormScreen(town: town)));
-    if (saved == true) setState(() {});
+    if (saved == true) _reload();
   }
 
   Future<void> _delete(Town town) async {
@@ -40,7 +50,7 @@ class _TownsScreenState extends State<TownsScreen> {
     );
     if (confirmed == true) {
       await LocalStore.deleteTown(town.id);
-      setState(() {});
+      _reload();
     }
   }
 
@@ -50,31 +60,38 @@ class _TownsScreenState extends State<TownsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuTownsVisited)),
       body: OptionsBackground(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: AdminSession.instance.isAdmin,
-          builder: (context, isAdmin, _) => ListView.builder(
-            itemCount: LocalStore.towns.length,
-            itemBuilder: (context, index) {
-              final town = LocalStore.towns[index];
-              return ListTile(
-                title: Text(town.name),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => DetailPage(title: town.name, description: town.description),
-                  ),
-                ),
-                trailing: isAdmin
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(icon: const Icon(Icons.edit), onPressed: () => _openForm(town: town)),
-                          IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(town)),
-                        ],
-                      )
-                    : null,
-              );
-            },
-          ),
+        child: FutureBuilder<List<Town>>(
+          future: _towns,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final towns = snapshot.data!;
+            return ValueListenableBuilder<bool>(
+              valueListenable: AdminSession.instance.isAdmin,
+              builder: (context, isAdmin, _) => ListView.builder(
+                itemCount: towns.length,
+                itemBuilder: (context, index) {
+                  final town = towns[index];
+                  return ListTile(
+                    title: Text(town.name),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => DetailPage(title: town.name, description: town.description),
+                      ),
+                    ),
+                    trailing: isAdmin
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(icon: const Icon(Icons.edit), onPressed: () => _openForm(town: town)),
+                              IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(town)),
+                            ],
+                          )
+                        : null,
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: ValueListenableBuilder<bool>(

@@ -18,11 +18,21 @@ class GuidesScreen extends StatefulWidget {
 }
 
 class _GuidesScreenState extends State<GuidesScreen> {
+  late Future<List<Guide>> _guides;
+
+  @override
+  void initState() {
+    super.initState();
+    _guides = LocalStore.guides;
+  }
+
+  void _reload() => setState(() => _guides = LocalStore.guides);
+
   Future<void> _openForm({Guide? guide}) async {
     final saved = await Navigator.of(
       context,
     ).push<bool>(MaterialPageRoute<bool>(builder: (context) => GuideFormScreen(guide: guide)));
-    if (saved == true) setState(() {});
+    if (saved == true) _reload();
   }
 
   Future<void> _delete(Guide guide) async {
@@ -40,7 +50,7 @@ class _GuidesScreenState extends State<GuidesScreen> {
     );
     if (confirmed == true) {
       await LocalStore.deleteGuide(guide.id);
-      setState(() {});
+      _reload();
     }
   }
 
@@ -50,31 +60,38 @@ class _GuidesScreenState extends State<GuidesScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuGuides)),
       body: OptionsBackground(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: AdminSession.instance.isAdmin,
-          builder: (context, isAdmin, _) => ListView.builder(
-            itemCount: LocalStore.guides.length,
-            itemBuilder: (context, index) {
-              final guide = LocalStore.guides[index];
-              return ListTile(
-                title: Text(guide.name),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => DetailPage(title: guide.name, description: guide.bio),
-                  ),
-                ),
-                trailing: isAdmin
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(icon: const Icon(Icons.edit), onPressed: () => _openForm(guide: guide)),
-                          IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(guide)),
-                        ],
-                      )
-                    : null,
-              );
-            },
-          ),
+        child: FutureBuilder<List<Guide>>(
+          future: _guides,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final guides = snapshot.data!;
+            return ValueListenableBuilder<bool>(
+              valueListenable: AdminSession.instance.isAdmin,
+              builder: (context, isAdmin, _) => ListView.builder(
+                itemCount: guides.length,
+                itemBuilder: (context, index) {
+                  final guide = guides[index];
+                  return ListTile(
+                    title: Text(guide.name),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => DetailPage(title: guide.name, description: guide.bio),
+                      ),
+                    ),
+                    trailing: isAdmin
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(icon: const Icon(Icons.edit), onPressed: () => _openForm(guide: guide)),
+                              IconButton(icon: const Icon(Icons.delete), onPressed: () => _delete(guide)),
+                            ],
+                          )
+                        : null,
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: ValueListenableBuilder<bool>(

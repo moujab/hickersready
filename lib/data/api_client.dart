@@ -2,13 +2,16 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-/// Talks to the Spring Boot backend. During local development this points
-/// at the backend running on the same machine; swap [baseUrl] when the
-/// backend gets a real production home.
+/// Talks to the Spring Boot backend. Defaults to the backend running on the
+/// same machine for local development; pass the deployed backend's URL at
+/// build time with `--dart-define=API_BASE_URL=https://<host>/api`.
 class ApiClient {
   ApiClient._();
 
-  static const String baseUrl = 'http://localhost:8080/api';
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://localhost:8080/api',
+  );
 
   static Uri _uri(String path) => Uri.parse('$baseUrl$path');
 

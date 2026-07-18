@@ -4,6 +4,7 @@ import '../data/admin_session.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/invitation.dart';
+import '../widgets/news_ticker.dart';
 import '../widgets/options_background.dart';
 import 'invitation_form_screen.dart';
 
@@ -74,7 +75,7 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.menuTrailsDone)),
+      appBar: AppBar(title: Text(l10n.menuTrailsDone), bottom: const NewsTicker()),
       body: OptionsBackground(
         child: FutureBuilder<List<Invitation>>(
           future: _invitations,

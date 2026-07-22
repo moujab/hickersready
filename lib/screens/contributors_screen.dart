@@ -4,7 +4,7 @@ import '../data/admin_session.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/contributor.dart';
-import '../widgets/news_ticker.dart';
+import '../widgets/app_banners.dart';
 import '../widgets/options_background.dart';
 import 'contributor_detail_screen.dart';
 import 'contributor_form_screen.dart';
@@ -61,7 +61,7 @@ class _ContributorsScreenState extends State<ContributorsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.menuContributors), bottom: const NewsTicker()),
+      appBar: AppBar(title: Text(l10n.menuContributors), bottom: const AppBanners()),
       body: OptionsBackground(
         child: FutureBuilder<List<Contributor>>(
           future: _contributors,

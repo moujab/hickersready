@@ -4,8 +4,8 @@ import '../data/admin_session.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/town.dart';
+import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
-import '../widgets/news_ticker.dart';
 import '../widgets/options_background.dart';
 import 'town_form_screen.dart';
 
@@ -59,7 +59,7 @@ class _TownsScreenState extends State<TownsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.menuTownsVisited), bottom: const NewsTicker()),
+      appBar: AppBar(title: Text(l10n.menuTownsVisited), bottom: const AppBanners()),
       body: OptionsBackground(
         child: FutureBuilder<List<Town>>(
           future: _towns,

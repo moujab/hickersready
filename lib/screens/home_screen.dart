@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../data/admin_session.dart';
 import '../data/background_audio.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
-import '../widgets/news_ticker.dart';
 import 'contributors_screen.dart';
 import 'guides_screen.dart';
 import 'invitations_screen.dart';
@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0,
-        bottom: const NewsTicker(),
+        bottom: const AppBanners(),
         actions: [
           ValueListenableBuilder<bool>(
             valueListenable: AdminSession.instance.isAdmin,
@@ -122,7 +122,7 @@ class HomeScreen extends StatelessWidget {
           ),
           child: ListView(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + kToolbarHeight + NewsTicker.height + 16,
+            top: MediaQuery.of(context).padding.top + kToolbarHeight + AppBanners.height + 16,
           ),
           children: [
             _MenuCard(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/upcoming_hike.dart';
+import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
-import '../widgets/news_ticker.dart';
 import '../widgets/options_background.dart';
 
 /// Menu item 5: "Upcoming hikes" — future hikes in chronological order;
@@ -24,7 +24,7 @@ class _UpcomingHikesScreenState extends State<UpcomingHikesScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.menuUpcomingHikes), bottom: const NewsTicker()),
+      appBar: AppBar(title: Text(l10n.menuUpcomingHikes), bottom: const AppBanners()),
       body: OptionsBackground(
         child: FutureBuilder<List<UpcomingHike>>(
           future: _hikes,

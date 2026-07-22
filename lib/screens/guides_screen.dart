@@ -4,8 +4,8 @@ import '../data/admin_session.dart';
 import '../data/local_store.dart';
 import '../l10n/app_localizations.dart';
 import '../models/guide.dart';
+import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
-import '../widgets/news_ticker.dart';
 import '../widgets/options_background.dart';
 import 'guide_form_screen.dart';
 
@@ -59,7 +59,7 @@ class _GuidesScreenState extends State<GuidesScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.menuGuides), bottom: const NewsTicker()),
+      appBar: AppBar(title: Text(l10n.menuGuides), bottom: const AppBanners()),
       body: OptionsBackground(
         child: FutureBuilder<List<Guide>>(
           future: _guides,

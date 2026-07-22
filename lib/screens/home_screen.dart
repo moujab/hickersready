@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/admin_session.dart';
 import '../data/background_audio.dart';
@@ -182,9 +183,22 @@ class HomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Center(
-                child: Text(
-                  l10n.groupName,
-                  style: const TextStyle(color: Colors.white),
+                child: Column(
+                  children: [
+                    Text(l10n.groupName, style: const TextStyle(color: Colors.white)),
+                    const SizedBox(height: 4),
+                    FutureBuilder<PackageInfo>(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        final version = snapshot.data?.version;
+                        final year = DateTime.now().year;
+                        return Text(
+                          version == null ? '$year' : 'v$version · $year',
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

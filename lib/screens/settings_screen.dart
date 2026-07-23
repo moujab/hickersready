@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/auth_session.dart';
 import '../data/local_store.dart';
+import '../data/weather_client.dart';
 import '../l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../widgets/options_background.dart';
@@ -22,7 +25,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late final TextEditingController _familyController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _weatherCityController;
   late final Future<void> _loaded;
+
+  double? _weatherLat;
+  double? _weatherLon;
+  List<GeoCity> _citySuggestions = [];
+  Timer? _citySearchDebounce;
 
   static final _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
@@ -34,6 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _familyController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
+    _weatherCityController = TextEditingController();
     _loaded = _loadProfile();
   }
 
@@ -45,6 +55,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _familyController.text = profile.family;
     _emailController.text = profile.email;
     _phoneController.text = profile.phone;
+    _weatherCityController.text = profile.weatherCity ?? '';
+    _weatherLat = profile.weatherLat;
+    _weatherLon = profile.weatherLon;
+  }
+
+  void _onWeatherCityChanged(String query) {
+    _weatherLat = null;
+    _weatherLon = null;
+    _citySearchDebounce?.cancel();
+    _citySearchDebounce = Timer(const Duration(milliseconds: 400), () async {
+      final results = await WeatherClient.searchCity(query);
+      if (mounted) setState(() => _citySuggestions = results);
+    });
+  }
+
+  void _selectCity(GeoCity city) {
+    setState(() {
+      _weatherCityController.text = city.displayName;
+      _weatherLat = city.latitude;
+      _weatherLon = city.longitude;
+      _citySuggestions = [];
+    });
   }
 
   @override
@@ -54,6 +86,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _familyController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _weatherCityController.dispose();
+    _citySearchDebounce?.cancel();
     super.dispose();
   }
 
@@ -65,6 +99,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       family: _familyController.text.trim(),
       email: _emailController.text.trim(),
       phone: _phoneController.text.trim(),
+      weatherCity: _weatherCityController.text.trim().isEmpty ? null : _weatherCityController.text.trim(),
+      weatherLat: _weatherLat,
+      weatherLon: _weatherLon,
     );
     await LocalStore.putUserProfile(AuthSession.instance.currentEmail!, profile);
     if (!mounted) return;
@@ -124,6 +161,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     keyboardType: TextInputType.phone,
                     validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequired : null,
                   ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _weatherCityController,
+                    decoration: InputDecoration(
+                      labelText: l10n.settingsWeatherCity,
+                      helperText: l10n.settingsWeatherCityHint,
+                      helperMaxLines: 2,
+                      prefixIcon: const Icon(Icons.wb_sunny_outlined),
+                    ),
+                    onChanged: _onWeatherCityChanged,
+                  ),
+                  if (_citySuggestions.isNotEmpty)
+                    Card(
+                      margin: const EdgeInsets.only(top: 4),
+                      child: Column(
+                        children: _citySuggestions
+                            .map(
+                              (city) => ListTile(
+                                dense: true,
+                                leading: const Icon(Icons.location_on_outlined),
+                                title: Text(city.displayName),
+                                onTap: () => _selectCity(city),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   const SizedBox(height: 24),
                   FilledButton(onPressed: _save, child: Text(l10n.save)),
                   const SizedBox(height: 12),

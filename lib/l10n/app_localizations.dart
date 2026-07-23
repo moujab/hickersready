@@ -346,6 +346,24 @@ abstract class AppLocalizations {
   /// **'رقم الهاتف'**
   String get settingsPhone;
 
+  /// No description provided for @settingsWeatherCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدينة الطقس'**
+  String get settingsWeatherCity;
+
+  /// No description provided for @settingsWeatherCityHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن مدينتك لعرض الطقس في الصفحة الرئيسية'**
+  String get settingsWeatherCityHint;
+
+  /// No description provided for @noCitiesFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم العثور على مدينة بهذا الاسم'**
+  String get noCitiesFound;
+
   /// No description provided for @invalidEmail.
   ///
   /// In ar, this message translates to:

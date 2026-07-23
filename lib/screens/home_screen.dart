@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/admin_session.dart';
 import '../data/background_audio.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
+import '../widgets/weather_badge.dart';
 import 'contributors_screen.dart';
 import 'guides_screen.dart';
 import 'invitations_screen.dart';
 import 'settings_screen.dart';
 import 'towns_screen.dart';
 import 'upcoming_hikes_screen.dart';
+
+const _appVersion = '1.0.0';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -82,7 +84,13 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(l10n.appTitle),
+        title: Row(
+          children: [
+            Flexible(child: Text(l10n.appTitle, overflow: TextOverflow.ellipsis)),
+            const SizedBox(width: 12),
+            const WeatherBadge(),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -187,16 +195,13 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(l10n.groupName, style: const TextStyle(color: Colors.white)),
                     const SizedBox(height: 4),
-                    FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
-                        final version = snapshot.data?.version;
-                        final year = DateTime.now().year;
-                        return Text(
-                          version == null ? '$year' : 'v$version · $year',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
-                        );
-                      },
+                    Container(
+                      color: Colors.black,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      child: Text(
+                        'v$_appVersion · ${DateTime.now().year}',
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
                     ),
                   ],
                 ),

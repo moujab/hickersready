@@ -18,15 +18,29 @@ public class UserProfile {
 
     private String phone;
 
+    private String weatherCity;
+
+    private Double weatherLat;
+
+    private Double weatherLon;
+
     protected UserProfile() {
     }
 
     public UserProfile(String email, String name, String father, String family, String phone) {
+        this(email, name, father, family, phone, null, null, null);
+    }
+
+    public UserProfile(String email, String name, String father, String family, String phone,
+            String weatherCity, Double weatherLat, Double weatherLon) {
         this.email = email;
         this.name = name;
         this.father = father;
         this.family = family;
         this.phone = phone;
+        this.weatherCity = weatherCity;
+        this.weatherLat = weatherLat;
+        this.weatherLon = weatherLon;
     }
 
     public String getEmail() {
@@ -67,5 +81,29 @@ public class UserProfile {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getWeatherCity() {
+        return weatherCity;
+    }
+
+    public void setWeatherCity(String weatherCity) {
+        this.weatherCity = weatherCity;
+    }
+
+    public Double getWeatherLat() {
+        return weatherLat;
+    }
+
+    public void setWeatherLat(Double weatherLat) {
+        this.weatherLat = weatherLat;
+    }
+
+    public Double getWeatherLon() {
+        return weatherLon;
+    }
+
+    public void setWeatherLon(Double weatherLon) {
+        this.weatherLon = weatherLon;
     }
 }

@@ -136,6 +136,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsPhone => 'رقم الهاتف';
 
   @override
+  String get settingsWeatherCity => 'مدينة الطقس';
+
+  @override
+  String get settingsWeatherCityHint =>
+      'ابحث عن مدينتك لعرض الطقس في الصفحة الرئيسية';
+
+  @override
+  String get noCitiesFound => 'لم يتم العثور على مدينة بهذا الاسم';
+
+  @override
   String get invalidEmail => 'بريد إلكتروني غير صحيح';
 
   @override

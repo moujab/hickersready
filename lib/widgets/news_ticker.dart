@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../data/local_store.dart';
-import '../models/invitation.dart';
-import '../models/upcoming_hike.dart';
 import 'marquee_banner.dart';
 
-/// Auto-scrolling strip of upcoming hikes and invitations — a news ticker —
+/// Auto-scrolling strip of upcoming hikes (menu item 5) — a news ticker —
 /// meant to sit just below a page's app bar via `AppBar(bottom: NewsTicker())`.
 class NewsTicker extends StatelessWidget implements PreferredSizeWidget {
   const NewsTicker({super.key});
@@ -23,14 +21,10 @@ class NewsTicker extends StatelessWidget implements PreferredSizeWidget {
   );
 
   static Future<List<String>> _loadItems() async {
-    final results = await Future.wait([LocalStore.upcomingHikes, LocalStore.invitations]);
-    final hikes = results[0] as List<UpcomingHike>;
-    final invitations = results[1] as List<Invitation>;
-    final entries = <MapEntry<DateTime, String>>[
-      ...hikes.map((h) => MapEntry(h.date, '⛰ ${h.trailName} — ${_formatDate(h.date)}')),
-      ...invitations.map((i) => MapEntry(i.date, '📣 ${i.trailName} — ${_formatDate(i.date)}')),
-    ]..sort((a, b) => a.key.compareTo(b.key));
-    return entries.map((e) => e.value).toList();
+    final hikes = await LocalStore.upcomingHikes;
+    return (hikes..sort((a, b) => a.date.compareTo(b.date)))
+        .map((h) => '⛰ ${h.trailName} — ${_formatDate(h.date)}')
+        .toList();
   }
 
   static String _formatDate(DateTime date) => '${date.year}/${date.month}/${date.day}';

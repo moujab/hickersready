@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
 import '../widgets/weather_badge.dart';
+import 'admin_users_screen.dart';
 import 'contributors_screen.dart';
 import 'guides_screen.dart';
 import 'invitations_screen.dart';
@@ -180,6 +181,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+            ValueListenableBuilder<bool>(
+              valueListenable: AdminSession.instance.isAdmin,
+              builder: (context, isAdmin, _) => isAdmin
+                  ? _MenuCard(
+                      icon: Icons.manage_accounts,
+                      label: l10n.menuUsers,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(builder: (context) => const AdminUsersScreen()),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
             _MenuCard(
               icon: Icons.settings,

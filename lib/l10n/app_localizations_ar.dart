@@ -136,6 +136,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsPhone => 'رقم الهاتف';
 
   @override
+  String get menuUsers => 'المستخدمون';
+
+  @override
+  String get adminNewUser => 'مستخدم جديد';
+
+  @override
+  String get adminEditUser => 'تعديل المستخدم';
+
+  @override
+  String get adminPasswordHintNew => 'كلمة المرور';
+
+  @override
+  String get adminPasswordHintEdit => 'اتركها فارغة لعدم تغيير كلمة المرور';
+
+  @override
+  String get noUsers => 'لا يوجد مستخدمون مسجّلون بعد';
+
+  @override
+  String get genericError => 'حدث خطأ، حاول مرة أخرى';
+
+  @override
   String get settingsWeatherCity => 'مدينة الطقس';
 
   @override

@@ -346,6 +346,48 @@ abstract class AppLocalizations {
   /// **'رقم الهاتف'**
   String get settingsPhone;
 
+  /// No description provided for @menuUsers.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستخدمون'**
+  String get menuUsers;
+
+  /// No description provided for @adminNewUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستخدم جديد'**
+  String get adminNewUser;
+
+  /// No description provided for @adminEditUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المستخدم'**
+  String get adminEditUser;
+
+  /// No description provided for @adminPasswordHintNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور'**
+  String get adminPasswordHintNew;
+
+  /// No description provided for @adminPasswordHintEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركها فارغة لعدم تغيير كلمة المرور'**
+  String get adminPasswordHintEdit;
+
+  /// No description provided for @noUsers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد مستخدمون مسجّلون بعد'**
+  String get noUsers;
+
+  /// No description provided for @genericError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ، حاول مرة أخرى'**
+  String get genericError;
+
   /// No description provided for @settingsWeatherCity.
   ///
   /// In ar, this message translates to:

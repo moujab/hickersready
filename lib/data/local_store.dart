@@ -1,3 +1,4 @@
+import '../models/admin_user.dart';
 import '../models/contributor.dart';
 import '../models/guide.dart';
 import '../models/invitation.dart';
@@ -63,4 +64,55 @@ class LocalStore {
 
   static Future<void> putUserProfile(String accountEmail, UserProfile profile) =>
       ApiClient.put('/profile/$accountEmail', profile.toMap());
+
+  // --- Admin: registered-user management ---
+
+  static Future<List<AdminUser>> get adminUsers async {
+    final list = await ApiClient.getList('/admin/users');
+    return list.map((m) => AdminUser.fromMap(Map<String, dynamic>.from(m as Map))).toList();
+  }
+
+  /// Creates a new account + profile. Returns 'success', or 'emailTaken' if an
+  /// account with that email already exists, or 'error' on any other failure.
+  static Future<String> createAdminUser({
+    required String email,
+    required String password,
+    required String name,
+    required String father,
+    required String family,
+    required String phone,
+  }) async {
+    final response = await ApiClient.post('/admin/users', {
+      'email': email,
+      'password': password,
+      'name': name,
+      'father': father,
+      'family': family,
+      'phone': phone,
+    });
+    if (response.statusCode == 200) return 'success';
+    if (response.statusCode == 409) return 'emailTaken';
+    return 'error';
+  }
+
+  /// Updates an existing user's profile fields; a non-empty [password] resets
+  /// their password, an empty one leaves it unchanged.
+  static Future<void> updateAdminUser({
+    required String email,
+    required String password,
+    required String name,
+    required String father,
+    required String family,
+    required String phone,
+  }) =>
+      ApiClient.put('/admin/users/$email', {
+        'email': email,
+        'password': password,
+        'name': name,
+        'father': father,
+        'family': family,
+        'phone': phone,
+      });
+
+  static Future<void> deleteAdminUser(String email) => ApiClient.delete('/admin/users/$email');
 }

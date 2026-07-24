@@ -1,0 +1,52 @@
+name: Build Android APK
+
+# Manually triggered from the GitHub "Actions" tab.
+# You provide your Railway backend URL when you click "Run workflow";
+# it is baked into the build so the app talks to your live backend
+# instead of the localhost default (see lib/data/api_client.dart).
+on:
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: "Backend API base URL (e.g. https://your-app.up.railway.app/api)"
+        required: true
+        type: string
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # This project has no committed android/ folder, so generate the
+      # Android platform scaffolding before building.
+      - name: Generate Android platform files
+        run: flutter create . --platforms=android --org com.hikersway --project-name hikers_way
+
+      - name: Build release APK
+        run: flutter build apk --release --dart-define=API_BASE_URL=${{ inputs.api_base_url }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hikers-way-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

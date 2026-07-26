@@ -199,4 +199,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get connectionError =>
       'تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى.';
+
+  @override
+  String get menuAnnouncements => 'التذكيرات والإشعارات';
+
+  @override
+  String get announcementsTitle => 'التذكيرات';
+
+  @override
+  String get noAnnouncements => 'لا توجد تذكيرات حالياً';
+
+  @override
+  String get announcementTitleField => 'العنوان';
+
+  @override
+  String get announcementMessageField => 'نص التذكير';
+
+  @override
+  String get announcementActiveField => 'مُفعّل (يظهر للأعضاء)';
+
+  @override
+  String get announcementInactiveLabel => 'غير مُفعّل';
 }

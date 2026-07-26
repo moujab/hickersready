@@ -68,5 +68,12 @@
   "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
   "emailTaken": "هذا البريد الإلكتروني مستخدم بالفعل",
   "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
-  "connectionError": "تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى."
+  "connectionError": "تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى.",
+  "menuAnnouncements": "التذكيرات والإشعارات",
+  "announcementsTitle": "التذكيرات",
+  "noAnnouncements": "لا توجد تذكيرات حالياً",
+  "announcementTitleField": "العنوان",
+  "announcementMessageField": "نص التذكير",
+  "announcementActiveField": "مُفعّل (يظهر للأعضاء)",
+  "announcementInactiveLabel": "غير مُفعّل"
 }

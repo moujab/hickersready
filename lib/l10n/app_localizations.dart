@@ -471,6 +471,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى.'**
   String get connectionError;
+
+  /// No description provided for @menuAnnouncements.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات والإشعارات'**
+  String get menuAnnouncements;
+
+  /// No description provided for @announcementsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات'**
+  String get announcementsTitle;
+
+  /// No description provided for @noAnnouncements.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تذكيرات حالياً'**
+  String get noAnnouncements;
+
+  /// No description provided for @announcementTitleField.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get announcementTitleField;
+
+  /// No description provided for @announcementMessageField.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص التذكير'**
+  String get announcementMessageField;
+
+  /// No description provided for @announcementActiveField.
+  ///
+  /// In ar, this message translates to:
+  /// **'مُفعّل (يظهر للأعضاء)'**
+  String get announcementActiveField;
+
+  /// No description provided for @announcementInactiveLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مُفعّل'**
+  String get announcementInactiveLabel;
 }
 
 class _AppLocalizationsDelegate

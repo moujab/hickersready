@@ -195,4 +195,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordTooShort => 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
+
+  @override
+  String get menuAnnouncements => 'الإعلانات والتذكيرات';
+
+  @override
+  String get announcementTitle => 'العنوان';
+
+  @override
+  String get announcementBody => 'نص الرسالة';
+
+  @override
+  String get sendAnnouncement => 'إرسال إعلان';
+
+  @override
+  String get noAnnouncements => 'لا توجد إعلانات بعد';
 }

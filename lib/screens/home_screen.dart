@@ -7,6 +7,7 @@ import '../widgets/app_banners.dart';
 import '../widgets/detail_page.dart';
 import '../widgets/weather_badge.dart';
 import 'admin_users_screen.dart';
+import 'announcements_screen.dart';
 import 'contributors_screen.dart';
 import 'guides_screen.dart';
 import 'invitations_screen.dart';
@@ -135,6 +136,13 @@ class HomeScreen extends StatelessWidget {
             top: MediaQuery.of(context).padding.top + kToolbarHeight + AppBanners.height + 16,
           ),
           children: [
+            _MenuCard(
+              icon: Icons.campaign,
+              label: l10n.menuAnnouncements,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const AnnouncementsScreen()),
+              ),
+            ),
             _MenuCard(
               icon: Icons.hiking,
               label: l10n.menuTrailsDone,

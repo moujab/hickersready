@@ -465,6 +465,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل'**
   String get passwordTooShort;
+
+  /// No description provided for @menuAnnouncements.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعلانات والتذكيرات'**
+  String get menuAnnouncements;
+
+  /// No description provided for @announcementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get announcementTitle;
+
+  /// No description provided for @announcementBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص الرسالة'**
+  String get announcementBody;
+
+  /// No description provided for @sendAnnouncement.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال إعلان'**
+  String get sendAnnouncement;
+
+  /// No description provided for @noAnnouncements.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إعلانات بعد'**
+  String get noAnnouncements;
 }
 
 class _AppLocalizationsDelegate

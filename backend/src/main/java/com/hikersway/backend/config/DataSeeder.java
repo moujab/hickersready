@@ -1,10 +1,12 @@
 package com.hikersway.backend.config;
 
+import com.hikersway.backend.entity.Announcement;
 import com.hikersway.backend.entity.Contributor;
 import com.hikersway.backend.entity.Guide;
 import com.hikersway.backend.entity.Invitation;
 import com.hikersway.backend.entity.Town;
 import com.hikersway.backend.entity.UpcomingHike;
+import com.hikersway.backend.repository.AnnouncementRepository;
 import com.hikersway.backend.repository.ContributorRepository;
 import com.hikersway.backend.repository.GuideRepository;
 import com.hikersway.backend.repository.InvitationRepository;
@@ -24,14 +26,17 @@ public class DataSeeder implements CommandLineRunner {
     private final GuideRepository guides;
     private final ContributorRepository contributors;
     private final UpcomingHikeRepository upcomingHikes;
+    private final AnnouncementRepository announcements;
 
     public DataSeeder(InvitationRepository invitations, TownRepository towns, GuideRepository guides,
-            ContributorRepository contributors, UpcomingHikeRepository upcomingHikes) {
+            ContributorRepository contributors, UpcomingHikeRepository upcomingHikes,
+            AnnouncementRepository announcements) {
         this.invitations = invitations;
         this.towns = towns;
         this.guides = guides;
         this.contributors = contributors;
         this.upcomingHikes = upcomingHikes;
+        this.announcements = announcements;
     }
 
     @Override
@@ -70,6 +75,13 @@ public class DataSeeder implements CommandLineRunner {
                             "رحلة قادمة إلى غابة أرز تنورين، مستوى الصعوبة متوسط."),
                     new UpcomingHike("2", "أرز الشوف", LocalDateTime.of(2026, 9, 1, 0, 0),
                             "رحلة إلى محمية أرز الشوف، تشمل مشاهدة الطبيعة والتصوير.")));
+        }
+
+        if (announcements.count() == 0) {
+            announcements.saveAll(List.of(
+                    new Announcement("1", "أهلاً بكم في التطبيق",
+                            "يمكنكم الآن متابعة آخر الأخبار والتذكيرات الخاصة بمجموعتنا من هنا. ترقبوا رحلاتنا القادمة!",
+                            LocalDateTime.of(2026, 7, 1, 9, 0))));
         }
     }
 }

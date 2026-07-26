@@ -1,4 +1,5 @@
 import '../models/admin_user.dart';
+import '../models/announcement.dart';
 import '../models/contributor.dart';
 import '../models/guide.dart';
 import '../models/invitation.dart';
@@ -37,6 +38,11 @@ class LocalStore {
     return list.map((m) => UpcomingHike.fromMap(Map<String, dynamic>.from(m as Map))).toList();
   }
 
+  static Future<List<Announcement>> get announcements async {
+    final list = await ApiClient.getList('/announcements');
+    return list.map((m) => Announcement.fromMap(Map<String, dynamic>.from(m as Map))).toList();
+  }
+
   static Future<void> putInvitation(Invitation invitation) =>
       ApiClient.put('/invitations/${invitation.id}', invitation.toMap());
 
@@ -54,6 +60,11 @@ class LocalStore {
       ApiClient.put('/contributors/${contributor.id}', contributor.toMap());
 
   static Future<void> deleteContributor(String id) => ApiClient.delete('/contributors/$id');
+
+  static Future<void> putAnnouncement(Announcement announcement) =>
+      ApiClient.put('/announcements/${announcement.id}', announcement.toMap());
+
+  static Future<void> deleteAnnouncement(String id) => ApiClient.delete('/announcements/$id');
 
   /// Keyed by the given account email (the logged-in user), not the
   /// [UserProfile.email] form field.

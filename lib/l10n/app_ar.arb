@@ -67,5 +67,10 @@
   "haveAccountLogin": "لديك حساب بالفعل؟ سجّل الدخول",
   "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
   "emailTaken": "هذا البريد الإلكتروني مستخدم بالفعل",
-  "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل"
+  "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "menuAnnouncements": "الإعلانات والتذكيرات",
+  "announcementTitle": "العنوان",
+  "announcementBody": "نص الرسالة",
+  "sendAnnouncement": "إرسال إعلان",
+  "noAnnouncements": "لا توجد إعلانات بعد"
 }

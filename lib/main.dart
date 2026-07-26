@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: PushNotifications.navigatorKey,
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       locale: const Locale('ar'),
       localizationsDelegates: const [

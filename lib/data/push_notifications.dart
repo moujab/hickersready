@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import 'api_client.dart';
 import 'auth_session.dart';
 
@@ -16,6 +18,10 @@ class PushNotifications {
   PushNotifications._();
 
   static final PushNotifications instance = PushNotifications._();
+
+  /// Hooked into [MaterialApp.navigatorKey] so a tapped notification can show
+  /// its reminder in a dialog from outside the widget tree.
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   /// Web Push certificate key pair from the Firebase console
   /// (Project settings → Cloud Messaging → Web Push certificates).
@@ -33,6 +39,41 @@ class PushNotifications {
     AuthSession.instance.isLoggedIn.addListener(_onLoginChanged);
     if (AuthSession.instance.isLoggedIn.value) _onLoginChanged();
     FirebaseMessaging.instance.onTokenRefresh.listen(_register, onError: (_) {});
+
+    // Show the reminder itself when the user interacts with a notification:
+    // tapped while the app was in the background, tapped while it was fully
+    // closed (cold start), or received while the app is open (Android shows
+    // no tray banner in the foreground, so surface it here instead).
+    FirebaseMessaging.onMessageOpenedApp.listen(_showReminder);
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) _showReminder(message);
+    });
+    FirebaseMessaging.onMessage.listen(_showReminder);
+  }
+
+  Future<void> _showReminder(RemoteMessage message) async {
+    final title = message.notification?.title ?? message.data['title'];
+    final body = message.notification?.body ?? message.data['body'];
+    if (title == null && body == null) return;
+    // On a cold start the navigator may not exist yet — wait for it briefly.
+    for (var attempt = 0; attempt < 40; attempt++) {
+      final context = navigatorKey.currentContext;
+      if (context != null && context.mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        await showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(title ?? l10n.announcementsTitle),
+            content: Text(body ?? ''),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.close)),
+            ],
+          ),
+        );
+        return;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+    }
   }
 
   Future<void> _onLoginChanged() async {

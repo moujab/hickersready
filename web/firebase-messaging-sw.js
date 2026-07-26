@@ -27,3 +27,15 @@ messaging.onBackgroundMessage((payload) => {
       (payload.data && payload.data.body) || '';
   self.registration.showNotification(title, { body: body, dir: 'rtl', lang: 'ar' });
 });
+
+/* Clicking the notification focuses the site if a tab is already open,
+ * otherwise opens a new one. */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then((tabs) => {
+    for (const tab of tabs) {
+      if ('focus' in tab) return tab.focus();
+    }
+    return clients.openWindow('/');
+  }));
+});

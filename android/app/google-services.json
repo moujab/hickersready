@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "471185690405",
+    "project_id": "walk-and-discover-73c11",
+    "storage_bucket": "walk-and-discover-73c11.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471185690405:android:05e5625515d0cf286b14cc",
+        "android_client_info": {
+          "package_name": "org.walkanddiscover.hikersway"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbOtGFZjVPtXYnCsh0iMP8z3DWEOdxm8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

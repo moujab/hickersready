@@ -465,6 +465,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل'**
   String get passwordTooShort;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى.'**
+  String get connectionError;
 }
 
 class _AppLocalizationsDelegate

@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isRegisterMode = false;
+  bool _isSubmitting = false;
   String? _errorText;
 
   @override
@@ -33,16 +34,29 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    if (_isRegisterMode) {
-      final result = await AuthSession.instance.register(email, password);
-      if (result == RegisterResult.emailTaken && mounted) {
-        setState(() => _errorText = l10n.emailTaken);
+    setState(() {
+      _isSubmitting = true;
+      _errorText = null;
+    });
+
+    try {
+      if (_isRegisterMode) {
+        final result = await AuthSession.instance.register(email, password);
+        if (result == RegisterResult.emailTaken && mounted) {
+          setState(() => _errorText = l10n.emailTaken);
+        }
+      } else {
+        final result = await AuthSession.instance.login(email, password);
+        if (result == LoginResult.invalidCredentials && mounted) {
+          setState(() => _errorText = l10n.invalidCredentials);
+        }
       }
-    } else {
-      final result = await AuthSession.instance.login(email, password);
-      if (result == LoginResult.invalidCredentials && mounted) {
-        setState(() => _errorText = l10n.invalidCredentials);
-      }
+    } catch (_) {
+      // Network/host failure (offline, wrong API_BASE_URL, timeout, TLS, …).
+      // Surface it instead of leaving the button dead.
+      if (mounted) setState(() => _errorText = l10n.connectionError);
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
@@ -82,12 +96,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 24),
                     FilledButton(
-                      onPressed: _submit,
-                      child: Text(_isRegisterMode ? l10n.register : l10n.login),
+                      onPressed: _isSubmitting ? null : _submit,
+                      child: _isSubmitting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(_isRegisterMode ? l10n.register : l10n.login),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: () => setState(() {
+                      onPressed: _isSubmitting
+                          ? null
+                          : () => setState(() {
                         _isRegisterMode = !_isRegisterMode;
                         _errorText = null;
                       }),

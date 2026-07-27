@@ -34,13 +34,18 @@
 </head>
 <body>
   <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
+    Custom bootstrap: CanvasKit must come from Google's CDN, not this host.
+    Cloudflare doesn't edge-cache .wasm, so the self-hosted 5.6MB engine was
+    fetched from the slow origin on every uncached visit (~12s to first paint).
   -->
-  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    {{flutter_js}}
+    {{flutter_build_config}}
+    _flutter.buildConfig.builds.forEach((b) => {
+      b.canvasKitBaseUrl =
+        "https://www.gstatic.com/flutter-canvaskit/" + _flutter.buildConfig.engineRevision + "/";
+    });
+    _flutter.loader.load();
+  </script>
 </body>
 </html>

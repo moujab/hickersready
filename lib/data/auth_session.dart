@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_client.dart';
 
@@ -14,8 +15,21 @@ class AuthSession {
 
   static final AuthSession instance = AuthSession._();
 
+  static const _emailPrefsKey = 'loggedInEmail';
+
   final ValueNotifier<bool> isLoggedIn = ValueNotifier<bool>(false);
   String? currentEmail;
+
+  /// Restores the previous session (if any) from device storage so the user
+  /// only has to log in once, not on every app start.
+  Future<void> restore() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString(_emailPrefsKey);
+    if (savedEmail != null && savedEmail.isNotEmpty) {
+      currentEmail = savedEmail;
+      isLoggedIn.value = true;
+    }
+  }
 
   Future<RegisterResult> register(String email, String password) async {
     final normalizedEmail = email.trim().toLowerCase();
@@ -24,8 +38,7 @@ class AuthSession {
       'password': password,
     });
     if (response.statusCode == 409) return RegisterResult.emailTaken;
-    currentEmail = normalizedEmail;
-    isLoggedIn.value = true;
+    await _persistLogin(normalizedEmail);
     return RegisterResult.success;
   }
 
@@ -36,13 +49,20 @@ class AuthSession {
       'password': password,
     });
     if (response.statusCode == 401) return LoginResult.invalidCredentials;
+    await _persistLogin(normalizedEmail);
+    return LoginResult.success;
+  }
+
+  Future<void> _persistLogin(String normalizedEmail) async {
     currentEmail = normalizedEmail;
     isLoggedIn.value = true;
-    return LoginResult.success;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_emailPrefsKey, normalizedEmail);
   }
 
   void logout() {
     currentEmail = null;
     isLoggedIn.value = false;
+    SharedPreferences.getInstance().then((prefs) => prefs.remove(_emailPrefsKey));
   }
 }

@@ -11,6 +11,7 @@ import 'screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AuthSession.instance.restore();
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     PushNotifications.instance.start();

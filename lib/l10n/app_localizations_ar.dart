@@ -67,6 +67,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get logout => 'تسجيل الخروج';
 
   @override
+  String get logoutConfirmMessage => 'هل تريد تسجيل الخروج من التطبيق؟';
+
+  @override
   String get cancel => 'إلغاء';
 
   @override

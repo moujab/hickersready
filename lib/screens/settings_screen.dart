@@ -204,7 +204,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(height: 24),
                   FilledButton(onPressed: _save, child: Text(l10n.save)),
                   const SizedBox(height: 12),
-                  OutlinedButton(onPressed: AuthSession.instance.logout, child: Text(l10n.logout)),
+                  OutlinedButton(
+                    onPressed: () {
+                      AuthSession.instance.logout();
+                      // Unwind to the root route, where the auth gate in
+                      // main.dart now shows the login screen.
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    child: Text(l10n.logout),
+                  ),
                 ],
               ),
             );

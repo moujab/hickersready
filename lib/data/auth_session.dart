@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'admin_session.dart';
 import 'api_client.dart';
 
 enum LoginResult { success, invalidCredentials }
@@ -63,6 +64,8 @@ class AuthSession {
   void logout() {
     currentEmail = null;
     isLoggedIn.value = false;
+    // Dropping the account also drops any admin privileges.
+    AdminSession.instance.logout();
     SharedPreferences.getInstance().then((prefs) => prefs.remove(_emailPrefsKey));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/admin_session.dart';
+import '../data/auth_session.dart';
 import '../data/background_audio.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/announcements_bell.dart';
@@ -16,10 +17,26 @@ import 'settings_screen.dart';
 import 'towns_screen.dart';
 import 'upcoming_hikes_screen.dart';
 
-const _appVersion = '1.4.1';
+const _appVersion = '1.4.2';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<void> _handleLogoutTap(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.logout),
+        content: Text(l10n.logoutConfirmMessage),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(l10n.logout)),
+        ],
+      ),
+    );
+    if (confirmed == true) AuthSession.instance.logout();
+  }
 
   Future<void> _handleAdminTap(BuildContext context, bool isAdmin) async {
     final l10n = AppLocalizations.of(context)!;
@@ -113,6 +130,11 @@ class HomeScreen extends StatelessWidget {
               icon: Icon(playing ? Icons.volume_up : Icons.volume_off),
               onPressed: BackgroundAudio.instance.toggle,
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: l10n.logout,
+            onPressed: () => _handleLogoutTap(context),
           ),
         ],
       ),

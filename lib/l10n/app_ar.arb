@@ -25,6 +25,7 @@
   "pin": "الرمز",
   "incorrectPin": "رمز غير صحيح",
   "logout": "تسجيل الخروج",
+  "logoutConfirmMessage": "هل تريد تسجيل الخروج من التطبيق؟",
   "cancel": "إلغاء",
   "save": "حفظ",
   "add": "إضافة",

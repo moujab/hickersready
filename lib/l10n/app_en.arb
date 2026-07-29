@@ -19,6 +19,7 @@
   "pin": "PIN",
   "incorrectPin": "Incorrect PIN",
   "logout": "Log out",
+  "logoutConfirmMessage": "Do you want to log out of the app?",
   "cancel": "Cancel",
   "save": "Save",
   "add": "Add",

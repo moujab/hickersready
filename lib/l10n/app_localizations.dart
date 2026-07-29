@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'تسجيل الخروج'**
   String get logout;
 
+  /// No description provided for @logoutConfirmMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تسجيل الخروج من التطبيق؟'**
+  String get logoutConfirmMessage;
+
   /// No description provided for @cancel.
   ///
   /// In ar, this message translates to:

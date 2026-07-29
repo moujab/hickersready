@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'data/auth_session.dart';
+import 'data/locale_controller.dart';
 import 'data/push_notifications.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
@@ -12,6 +13,7 @@ import 'screens/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AuthSession.instance.restore();
+  await LocaleController.instance.restore();
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     PushNotifications.instance.start();
@@ -28,21 +30,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: PushNotifications.navigatorKey,
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-      locale: const Locale('ar'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)),
-      home: ValueListenableBuilder<bool>(
-        valueListenable: AuthSession.instance.isLoggedIn,
-        builder: (context, isLoggedIn, _) => isLoggedIn ? const HomeScreen() : const LoginScreen(),
+    return ValueListenableBuilder<Locale>(
+      valueListenable: LocaleController.instance.locale,
+      builder: (context, locale, _) => MaterialApp(
+        navigatorKey: PushNotifications.navigatorKey,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        locale: locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)),
+        home: ValueListenableBuilder<bool>(
+          valueListenable: AuthSession.instance.isLoggedIn,
+          builder: (context, isLoggedIn, _) => isLoggedIn ? const HomeScreen() : const LoginScreen(),
+        ),
       ),
     );
   }

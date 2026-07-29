@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/auth_session.dart';
+import '../data/locale_controller.dart';
 import '../l10n/app_localizations.dart';
 
 /// Login/register gate shown before the rest of the app is reachable.
@@ -75,6 +76,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: TextButton.icon(
+                        onPressed: () => LocaleController.instance.toggle(),
+                        icon: const Icon(Icons.language),
+                        // Deliberately not localized: each label is shown in
+                        // the language it switches TO.
+                        label: Text(LocaleController.instance.isArabic ? 'English' : 'العربية'),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Text(l10n.appTitle, style: Theme.of(context).textTheme.headlineSmall),
                     const SizedBox(height: 32),
                     TextFormField(

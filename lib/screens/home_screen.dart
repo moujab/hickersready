@@ -17,7 +17,7 @@ import 'settings_screen.dart';
 import 'towns_screen.dart';
 import 'upcoming_hikes_screen.dart';
 
-const _appVersion = '1.4.2';
+const _appVersion = '1.4.3';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -132,7 +132,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             tooltip: l10n.logout,
             onPressed: () => _handleLogoutTap(context),
           ),

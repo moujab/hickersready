@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../data/auth_session.dart';
 import '../data/local_store.dart';
+import '../data/locale_controller.dart';
 import '../data/weather_client.dart';
 import '../l10n/app_localizations.dart';
 import '../models/user_profile.dart';
@@ -126,6 +127,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.language),
+                    title: Text(l10n.settingsLanguage),
+                    trailing: TextButton(
+                      onPressed: () => LocaleController.instance.toggle(),
+                      // Deliberately not localized: each label is shown in
+                      // the language it switches TO.
+                      child: Text(LocaleController.instance.isArabic ? 'English' : 'العربية'),
+                    ),
+                  ),
+                  const Divider(height: 24),
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(labelText: l10n.settingsFirstName),

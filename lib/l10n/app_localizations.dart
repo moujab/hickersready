@@ -392,6 +392,12 @@ abstract class AppLocalizations {
   /// **'حدث خطأ، حاول مرة أخرى'**
   String get genericError;
 
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get settingsLanguage;
+
   /// No description provided for @settingsWeatherCity.
   ///
   /// In ar, this message translates to:

@@ -157,6 +157,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get genericError => 'حدث خطأ، حاول مرة أخرى';
 
   @override
+  String get settingsLanguage => 'اللغة';
+
+  @override
   String get settingsWeatherCity => 'مدينة الطقس';
 
   @override

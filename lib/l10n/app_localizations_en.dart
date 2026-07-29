@@ -159,6 +159,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genericError => 'Something went wrong, please try again';
 
   @override
+  String get settingsLanguage => 'Language';
+
+  @override
   String get settingsWeatherCity => 'Weather city';
 
   @override

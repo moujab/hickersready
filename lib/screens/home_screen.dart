@@ -16,7 +16,7 @@ import 'settings_screen.dart';
 import 'towns_screen.dart';
 import 'upcoming_hikes_screen.dart';
 
-const _appVersion = '1.4.0';
+const _appVersion = '1.4.1';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

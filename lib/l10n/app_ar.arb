@@ -55,6 +55,7 @@
   "adminPasswordHintEdit": "اتركها فارغة لعدم تغيير كلمة المرور",
   "noUsers": "لا يوجد مستخدمون مسجّلون بعد",
   "genericError": "حدث خطأ، حاول مرة أخرى",
+  "settingsLanguage": "اللغة",
   "settingsWeatherCity": "مدينة الطقس",
   "settingsWeatherCityHint": "ابحث عن مدينتك لعرض الطقس في الصفحة الرئيسية",
   "noCitiesFound": "لم يتم العثور على مدينة بهذا الاسم",

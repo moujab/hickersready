@@ -49,6 +49,7 @@
   "adminPasswordHintEdit": "Leave empty to keep the current password",
   "noUsers": "No registered users yet",
   "genericError": "Something went wrong, please try again",
+  "settingsLanguage": "Language",
   "settingsWeatherCity": "Weather city",
   "settingsWeatherCityHint": "Search for your city to show the weather on the home screen",
   "noCitiesFound": "No city found with that name",

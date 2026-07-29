@@ -1,11 +1,11 @@
 {
-    "name": "hikers_way",
-    "short_name": "hikers_way",
+    "name": "Walk & Discover Group",
+    "short_name": "Walk & Discover",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#4CAF50",
+    "description": "Hiking trails, upcoming hikes, guides and reminders from the Walk & Discover Group.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

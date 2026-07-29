@@ -43,6 +43,11 @@ class LocalStore {
     return list.map((m) => Announcement.fromMap(Map<String, dynamic>.from(m as Map))).toList();
   }
 
+  static Future<void> putUpcomingHike(UpcomingHike hike) =>
+      ApiClient.put('/upcoming-hikes/${hike.id}', hike.toMap());
+
+  static Future<void> deleteUpcomingHike(String id) => ApiClient.delete('/upcoming-hikes/$id');
+
   static Future<void> putInvitation(Invitation invitation) =>
       ApiClient.put('/invitations/${invitation.id}', invitation.toMap());
 
